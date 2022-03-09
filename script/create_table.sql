@@ -1,0 +1,1 @@
+create table messages (id int auto_increment not null primary key, author varchar(32) character set utf8mb4 not null, message varchar(1024) character set utf8mb4 not null, created_at timestamp not null);

@@ -1,0 +1,35 @@
+version: 2.1
+
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: 初期設定
+          command: |
+            echo 'Initial setup'
+      - run:
+          name: AWS CLI インストール
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+            echo 'AWS Install'
+      - run:
+          name: Webコンテナイメージビルド
+          command: |
+            docker build -t snssampleweb .
+      - run:
+          name: AWS ECR へ登録
+          command: |
+            tagname=`date +%s`
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+            docker tag snssampleweb ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/snssampleweb:${tagname}
+            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/snssampleweb:${tagname}
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - build
+
