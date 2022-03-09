@@ -36,7 +36,7 @@ print "</p>";
 ## Post form
 
 print '<form action="post.php" method="POST">';
-print '<p><div><label>name</label><input type="text" name="author" size="10"></div></p>';
-print '<p><div><label>message</label><input type="text" name="message" size="100"></div></p>';
+print '<p><div><label>Your name (max 10 characters)</label><br/><input type="text" name="author" size="10" maxlength="10"></div></p>';
+print '<p><div><label>message (max 100 characters)</label><br/><input type="text" name="message" size="100" maxlength="100"></div></p>';
 print '<input type="submit" value="send">';
 print '</form>';
